@@ -33,8 +33,8 @@ class User(db.Model, UserMixin):
 
     commenter = db.relationship('Comment', back_populates='user')
     
-    followee = db.relationship('Follower', foreign_keys=[Follower.user_id],back_populates='followed', cascade='all, delete-orphans')
-    follower = db.relationship ('Follower', foreign_keys=[Follower.follower_id], back_populates='following', cascade='all, delete-orphans')
+    followee = db.relationship('Follower', foreign_keys=[Follower.user_id],back_populates='followed', cascade='all, delete-orphan')
+    follower = db.relationship ('Follower', foreign_keys=[Follower.follower_id], back_populates='following', cascade='all, delete-orphan')
 
   
 
