@@ -1,4 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+from sqlalchemy.orm.attributes import instance_state
 from datetime import datetime
 
 class Comment(db.Model):
@@ -15,4 +16,18 @@ class Comment(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     user = db.relationship('User', back_populates='commenter')
-    dish = db.relationship('Dish', back_populates='commented_on_dish')
+    dish = db.relationship('Dish', back_populates='comments')
+
+
+    def to_dict(self):
+        state = instance_state(self)
+
+        comment_dict = {
+            'id': self.id,
+            'user': {
+                'username': self.user.username
+            },
+            'comment': self.comment,
+            'updated_at': self.updated_at,
+        }    
+            
