@@ -1,8 +1,22 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
+#from ..models import Follower
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime
 
+
+class Follower(db.Model):
+    __tablename__='followers'
+
+    if environment == "production":
+        __table_args__ = {'schema': SCHEMA}
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id'), ondelete='CASCADE'), nullable=False)
+    follower_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('users.id'), ondelete='CASCADE'), nullable=False)
+
+    followed = db.relationship('User', foreign_keys=[user_id],back_populates ='followee')
+    following = db.relationship('User', foreign_keys=[follower_id],back_populates='follower')
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -19,8 +33,10 @@ class User(db.Model, UserMixin):
 
     commenter = db.relationship('Comment', back_populates='user')
     
-    followee = db.relationship('Follower', back_populates='followee')
-    followee = db.relationship ('Follower', back_populates='follower')
+    followee = db.relationship('Follower', foreign_keys=[Follower.user_id],back_populates='followed', cascade='all, delete-orphans')
+    follower = db.relationship ('Follower', foreign_keys=[Follower.follower_id], back_populates='following', cascade='all, delete-orphans')
+
+  
 
 
     @property
@@ -41,6 +57,4 @@ class User(db.Model, UserMixin):
             'email': self.email
         }
 
-
-# Followers join table between users and users
     

@@ -5,7 +5,7 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 
 
 class Tag(db.Model):
-    __tablename__='tags'
+    __tablename__= 'tags'
 
     if environment == "production":
         __table_args__ = {'schema': SCHEMA}
@@ -13,13 +13,15 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(25))
 
+    dishes = db.relationship('Dish', secondary='selected_tags', back_populates='tags')
+
 
 # Selected-Categories join table between categories and dishes
-selected_categories = db.Table (
-    'selected_categories',
+selected_tags = db.Table (
+    'selected_tags',
     db.Column('dish_id', db.Integer, db.ForeignKey(add_prefix_for_prod('dishes.id'), ondelete='CASCADE'), primary_key=True),
-    db.Column('category_id', db.Integer, db.ForeignKey(add_prefix_for_prod('categories.id'), ondelete='CASCADE'), primary_key=True) 
+    db.Column('tag_id', db.Integer, db.ForeignKey(add_prefix_for_prod('tags.id'), ondelete='CASCADE'), primary_key=True) 
 )
 
 if environment == "production":
-    selected_categories.schema = SCHEMA
+    selected_tags.schema = SCHEMA

@@ -16,7 +16,9 @@ class Dish(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
-    commented_on_dish = db.relationship('Comment', back_populates='dish')
+    commented_on_dish = db.relationship('Comment', back_populates='dish', cascade='all, delete-orphan')
+    tags = db.relationship('Tag', secondary='selected_tags', back_populates='dishes')
+
 
 
 # Likes join table between dishes and users
