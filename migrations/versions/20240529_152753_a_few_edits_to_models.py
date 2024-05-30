@@ -7,6 +7,10 @@ Create Date: 2024-05-29 15:27:53.012594
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import Text
+import os
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
 
 
 # revision identifiers, used by Alembic.
@@ -79,6 +83,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['tag_id'], ['tags.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('dish_id', 'tag_id')
     )
+    if environment == "production":
+     op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};") 
     # ### end Alembic commands ###
 
 
