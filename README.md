@@ -1,132 +1,441 @@
-# Flask React Project
+## API Documentation
 
-This is the starter for the Flask React project.
+## USER AUTHENTICATION/AUTHORIZATION
 
-## Getting started
+### All endpoints that require authentication
 
-1. Clone this repository (only this branch).
+All endpoints that require a current user to be logged in.
 
-2. Install dependencies.
+* Request: endpoints that require authentication
+* Error Response: Require authentication
+  * Status Code: 401
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-   ```bash
-   pipenv install -r requirements.txt
-   ```
+    ```json
+    {
+      "message": "Authentication required"
+    }
+    ```
 
-3. Create a __.env__ file based on the example with proper settings for your
-   development environment.
+### All endpoints that require proper authorization
 
-4. Make sure the SQLite3 database connection URL is in the __.env__ file.
+All endpoints that require authentication and the current user does not have the
+correct role(s) or permission(s).
 
-5. This starter organizes all tables inside the `flask_schema` schema, defined
-   by the `SCHEMA` environment variable.  Replace the value for
-   `SCHEMA` with a unique name, **making sure you use the snake_case
-   convention.**
+* Request: endpoints that require proper authorization
+* Error Response: Require proper authorization
+  * Status Code: 403
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-6. Get into your pipenv, migrate your database, seed your database, and run your
-   Flask app:
+    ```json
+    {
+      "message": "Forbidden"
+    }
+    ```
 
-   ```bash
-   pipenv shell
-   ```
+### Get the Current User
 
-   ```bash
-   flask db upgrade
-   ```
+Returns the information about the current user that is logged in.
 
-   ```bash
-   flask seed all
-   ```
+* Require Authentication: false
+* Request
+  * Method: GET
+  * URL: /api/session
+  * Body: none
 
-   ```bash
-   flask run
-   ```
+* Successful Response when there is a logged in user
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-7. The React frontend has no styling applied. Copy the __.css__ files from your
-   Authenticate Me project into the corresponding locations in the
-   __react-vite__ folder to give your project a unique look.
+    ```json
+    {
+      "user": {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john.smith@gmail.com",
+        "username": "JohnSmith"
+      }
+    }
+    ```
 
-8. To run the React frontend in development, `cd` into the __react-vite__
-   directory and run `npm i` to install dependencies. Next, run `npm run build`
-   to create the `dist` folder. The starter has modified the `npm run build`
-   command to include the `--watch` flag. This flag will rebuild the __dist__
-   folder whenever you change your code, keeping the production version up to
-   date.
+* Successful Response when there is no logged in user
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-## Deployment through Render.com
+    ```json
+    {
+      "user": null
+    }
+    ```
 
-First, recall that Vite is a development dependency, so it will not be used in
-production. This means that you must already have the __dist__ folder located in
-the root of your __react-vite__ folder when you push to GitHub. This __dist__
-folder contains your React code and all necessary dependencies minified and
-bundled into a smaller footprint, ready to be served from your Python API.
+### Log In a User
 
-Begin deployment by running `npm run build` in your __react-vite__ folder and
-pushing any changes to GitHub.
+Logs in a current user with valid credentials and returns the current user's
+information.
 
-Refer to your Render.com deployment articles for more detailed instructions
-about getting started with [Render.com], creating a production database, and
-deployment debugging tips.
+* Require Authentication: false
+* Request
+  * Method: POST
+  * URL: /api/session
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-From the Render [Dashboard], click on the "New +" button in the navigation bar,
-and click on "Web Service" to create the application that will be deployed.
+    ```json
+    {
+      "credential": "john.smith@gmail.com",
+      "password": "secret password"
+    }
+    ```
 
-Select that you want to "Build and deploy from a Git repository" and click
-"Next". On the next page, find the name of the application repo you want to
-deploy and click the "Connect" button to the right of the name.
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-Now you need to fill out the form to configure your app. Most of the setup will
-be handled by the __Dockerfile__, but you do need to fill in a few fields.
+    ```json
+    {
+      "user": {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john.smith@gmail.com",
+        "username": "JohnSmith"
+      }
+    }
+    ```
 
-Start by giving your application a name.
+* Error Response: Invalid credentials
+  * Status Code: 401
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-Make sure the Region is set to the location closest to you, the Branch is set to
-"main", and Runtime is set to "Docker". You can leave the Root Directory field
-blank. (By default, Render will run commands from the root directory.)
+    ```json
+    {
+      "message": "Invalid credentials"
+    }
+    ```
 
-Select "Free" as your Instance Type.
+* Error response: Body validation errors
+  * Status Code: 400
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-### Add environment variables
+    ```json
+    {
+      "message": "Bad Request", // (or "Validation error" if generated by Sequelize),
+      "errors": {
+        "credential": "Email or username is required",
+        "password": "Password is required"
+      }
+    }
+    ```
 
-In the development environment, you have been securing your environment
-variables in a __.env__ file, which has been removed from source control (i.e.,
-the file is gitignored). In this step, you will need to input the keys and
-values for the environment variables you need for production into the Render
-GUI.
+### Sign Up a User
 
-Add the following keys and values in the Render GUI form:
+Creates a new user, logs them in as the current user, and returns the current
+user's information.
 
-- SECRET_KEY (click "Generate" to generate a secure secret for production)
-- FLASK_ENV production
-- FLASK_APP app
-- SCHEMA (your unique schema name, in snake_case)
+* Require Authentication: false
+* Request
+  * Method: POST
+  * URL: /api/users
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-In a new tab, navigate to your dashboard and click on your Postgres database
-instance.
+    ```json
+    {
+      "firstName": "John",
+      "lastName": "Smith",
+      "email": "john.smith@gmail.com",
+      "username": "JohnSmith",
+      "password": "secret password"
+    }
+    ```
 
-Add the following keys and values:
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-- DATABASE_URL (copy value from the **External Database URL** field)
+    ```json
+    {
+      "user": {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Smith",
+        "email": "john.smith@gmail.com",
+        "username": "JohnSmith"
+      }
+    }
+    ```
 
-**Note:** Add any other keys and values that may be present in your local
-__.env__ file. As you work to further develop your project, you may need to add
-more environment variables to your local __.env__ file. Make sure you add these
-environment variables to the Render GUI as well for the next deployment.
+* Error response: User already exists with the specified email
+  * Status Code: 500
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-### Deploy
+    ```json
+    {
+      "message": "User already exists",
+      "errors": {
+        "email": "User with that email already exists"
+      }
+    }
+    ```
 
-Now you are finally ready to deploy! Click "Create Web Service" to deploy your
-project. The deployment process will likely take about 10-15 minutes if
-everything works as expected. You can monitor the logs to see your Dockerfile
-commands being executed and any errors that occur.
+* Error response: User already exists with the specified username
+  * Status Code: 500
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-When deployment is complete, open your deployed site and check to see that you
-have successfully deployed your Flask application to Render! You can find the
-URL for your site just below the name of the Web Service at the top of the page.
+    ```json
+    {
+      "message": "User already exists",
+      "errors": {
+        "username": "User with that username already exists"
+      }
+    }
+    ```
 
-**Note:** By default, Render will set Auto-Deploy for your project to true. This
-setting will cause Render to re-deploy your application every time you push to
-main, always keeping it up to date.
+* Error response: Body validation errors
+  * Status Code: 400
+  * Headers:
+    * Content-Type: application/json
+  * Body:
 
-[Render.com]: https://render.com/
-[Dashboard]: https://dashboard.render.com/
-# Foodies
+    ```json
+    {
+      "message": "Bad Request", // (or "Validation error" if generated by Sequelize),
+      "errors": {
+        "email": "Invalid email",
+        "username": "Username is required",
+        "firstName": "First Name is required",
+        "lastName": "Last Name is required"
+      }
+    }
+    ```
+
+## SPOTS
+
+### Get all Dishes
+
+Returns all the dishes.
+
+* Require Authentication: false
+* Request
+  * Method: GET
+  * URL: /api/dishes
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+        [
+            {
+                "description": "A classic Italian pasta dish with a rich, meaty sauce.",
+                "home_cooked": true,
+                "id": 1,
+                "img": "https://foodiedishesimages.s3.us-east-2.amazonaws.com/spaghetti-bolognese.webp",
+                "name": "Spaghetti Bolognese",
+                "num_of_comments": 2,
+                "updated_at": "Wed, 29 May 2024 15:28:12 GMT",
+                "user_id": {
+                    "username": "Demo"
+                }
+            }
+        ]
+    ```
+
+### Get all Spots owned by the Current User
+
+Returns all the spots owned (created) by the current user.
+
+* Require Authentication: true
+* Request
+  * Method: GET
+  * URL: /api/spots/current
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "Spots": [
+        {
+          "id": 1,
+          "ownerId": 1,
+          "address": "123 Disney Lane",
+          "city": "San Francisco",
+          "state": "California",
+          "country": "United States of America",
+          "lat": 37.7645358,
+          "lng": -122.4730327,
+          "name": "App Academy",
+          "description": "Place where web developers are created",
+          "price": 123,
+          "createdAt": "2021-11-19 20:39:36",
+          "updatedAt": "2021-11-19 20:39:36",
+          "avgRating": 4.5,
+          "previewImage": "image url"
+        }
+      ]
+    }
+    ```
+
+### Get details of a Dish from an id
+
+Returns the details of a spot specified by its id.
+
+* Require Authentication: false
+* Request
+  * Method: GET
+  * URL: /api/dishes/:dishId
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+        {
+            "comments": [
+                {
+                    "comment": "The Spaghetti Bolognese looks amazing! Can you share the recipe and the cooking time?",
+                    "id": 1,
+                    "updated_at": "Wed, 29 May 2024 15:28:12 GMT",
+                    "user": {
+                        "username": "Marnie"
+                    }
+                },
+                {
+                    "comment": "What herbs did you put in the spaghetti bolognese? I'm always trying to figure out which herbs to use.",
+                    "id": 11,
+                    "updated_at": "Wed, 29 May 2024 15:28:12 GMT",
+                    "user": {
+                        "username": "Jordan"
+                    }
+                }
+            ],
+            "description": "A classic Italian pasta dish with a rich, meaty sauce.",
+            "home_cooked": true,
+            "id": 1,
+            "img": "https://foodiedishesimages.s3.us-east-2.amazonaws.com/spaghetti-bolognese.webp",
+            "name": "Spaghetti Bolognese",
+            "updated_at": "Wed, 29 May 2024 15:28:12 GMT",
+            "user_id": {
+                "username": "Demo"
+            }
+        }
+    ```
+
+* Error response: Dish not found
+  * Status Code: 404
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Dish not found"
+    }
+    ```
+
+### Create a Spot
+
+Creates and returns a new spot.
+
+* Require Authentication: true
+* Request
+  * Method: POST
+  * URL: /api/spots
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "address": "123 Disney Lane",
+      "city": "San Francisco",
+      "state": "California",
+      "country": "United States of America",
+      "lat": 37.7645358,
+      "lng": -122.4730327,
+      "name": "App Academy",
+      "description": "Place where web developers are created",
+      "price": 123
+    }
+    ```
+
+* Successful Response
+  * Status Code: 201
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "id": 1,
+      "ownerId": 1,
+      "address": "123 Disney Lane",
+      "city": "San Francisco",
+      "state": "California",
+      "country": "United States of America",
+      "lat": 37.7645358,
+      "lng": -122.4730327,
+      "name": "App Academy",
+      "description": "Place where web developers are created",
+      "price": 123,
+      "createdAt": "2021-11-19 20:39:36",
+      "updatedAt": "2021-11-19 20:39:36"
+    }
+    ```
+
+* Error Response: Body validation errors
+  * Status Code: 400
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "message": "Bad Request", // (or "Validation error" if generated by Sequelize),
+      "errors": {
+        "address": "Street address is required",
+        "city": "City is required",
+        "state": "State is required",
+        "country": "Country is required",
+        "lat": "Latitude must be within -90 and 90",
+        "lng": "Longitude must be within -180 and 180",
+        "name": "Name must be less than 50 characters",
+        "description": "Description is required",
+        "price": "Price per day must be a positive number"
+      }
+    }
+    ```

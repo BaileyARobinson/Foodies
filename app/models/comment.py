@@ -15,7 +15,7 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
-    user = db.relationship('User', back_populates='commenter')
+    commenter = db.relationship('User', back_populates='comments')
     dish = db.relationship('Dish', back_populates='comments')
 
 
@@ -25,9 +25,11 @@ class Comment(db.Model):
         comment_dict = {
             'id': self.id,
             'user': {
-                'username': self.user.username
+                'username': self.commenter.username
             },
             'comment': self.comment,
             'updated_at': self.updated_at,
-        }    
+        }   
+
+        return comment_dict 
             

@@ -17,28 +17,33 @@ class Dish(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
+    creator = db.relationship('User', back_populates='dish')
     comments = db.relationship('Comment', back_populates='dish', cascade='all, delete-orphan')
     tags = db.relationship('Tag', secondary='selected_tags', back_populates='dishes')
 
 
-    def to_dict(self, include_categories=False):
+    def to_dict(self, include_categories=False, include_comments=False):
         state = instance_state(self)
 
         dish_dict = {
             'id': self.id,
             'name': self.name,
-            'user_id': self.user_id,
+            'user_id': {
+                'username': self.creator.username
+            },
             'img': self.img,
             'description': self.description,
             'home_cooked': self.home_cooked,
             'updated_at': self.updated_at,
         }
 
-        if 'comments' in state.dict:
+        if include_comments: 
             dish_dict['comments'] = [
-                comment.to_dict for comment in self.comments
+                comment.to_dict() for comment in self.comments
             ]
 
+        return dish_dict 
+    
 
 # Likes join table between dishes and users
 

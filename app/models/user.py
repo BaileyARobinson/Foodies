@@ -31,8 +31,9 @@ class User(db.Model, UserMixin):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
-    commenter = db.relationship('Comment', back_populates='user')
     
+    dish = db.relationship('Dish', back_populates='creator', cascade='all, delete-orphan')
+    comments = db.relationship('Comment', back_populates='commenter')
     followee = db.relationship('Follower', foreign_keys=[Follower.user_id],back_populates='followed', cascade='all, delete-orphan')
     follower = db.relationship ('Follower', foreign_keys=[Follower.follower_id], back_populates='following', cascade='all, delete-orphan')
 
