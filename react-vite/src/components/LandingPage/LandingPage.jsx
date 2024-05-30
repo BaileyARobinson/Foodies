@@ -37,8 +37,8 @@ function LandingPage() {
                                 <div className='right-of-middle'></div>
                             </div>
                             <div className='description'> 
-                            {dish.description.length > 170 ? 
-                            `${dish.description.slice(0,170)}...` : dish.description } 
+                            {dish?.description?.length > 170 ? 
+                            `${dish?.description?.slice(0,170)}...` : dish.description } 
                             
                             </div>
             

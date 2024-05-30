@@ -1,0 +1,47 @@
+h1 {
+    align-self: center;
+}
+
+.dish-container {
+    display: flex;
+    flex-direction: row;
+}
+
+img {
+    width: 75%;
+    height: auto;
+}
+
+.top-of-sidebar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: grey;
+    border-top: black 1px solid;
+    padding: 20px 20px 20px 20px;
+    
+
+}
+.dish-page-description {
+    font-weight: bold;
+    padding: 20px 20px 10px 10px;
+    border-top: lightgray 1px solid;
+    border-bottom: lightgray 1px solid;
+}
+
+.sidebar-all-comments {
+    padding: 20px 20px 10px 10px;
+}
+
+.sidebar-comment-card {
+    padding: 10px 20px 10px 20px;
+    border-bottom: lightgray 1px solid;
+}
+
+.comment {
+    padding: 10px 20px 0px 20px;
+}
+
+.commenter {
+    font-weight: bold;
+}
