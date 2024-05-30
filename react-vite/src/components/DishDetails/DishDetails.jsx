@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react";
-import { thunkLogin } from "../../redux/session";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDishThunk } from "../../redux/dishes";
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import './DishDetails.css'
 
 function DishDetails () {
 
     const dispatch = useDispatch()
-    const navigate = useNavigate()
+
 
     const { id } = useParams()
 
@@ -42,7 +41,7 @@ function DishDetails () {
                         {dish?.comments?.map((comment) => {
                             return (
                                 <div className='sidebar-comment-card'key={comment.id}>
-                                    <div classname='comment'>{comment.comment} <p className='commenter'>{`--${comment.user.username}`}</p>
+                                    <div className='comment'>{comment.comment} <p className='commenter'>{`--${comment.user.username}`}</p>
                                     </div>
                                 
                                 </div>
