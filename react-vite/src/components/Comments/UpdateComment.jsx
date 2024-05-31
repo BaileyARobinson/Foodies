@@ -4,7 +4,7 @@ import { updateCommentThunk } from "../../redux/comments";
 import { useState } from 'react'
 
 function UpdateComment ({ comment_id, setIsNewComment, comment }) {
-
+    
     const dispatch = useDispatch()
     const { closeModal } = useModal()
 
@@ -12,7 +12,7 @@ function UpdateComment ({ comment_id, setIsNewComment, comment }) {
     const [newComment, setNewComment] = useState(comment)
 
     const err = {}
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
 
         if (newComment.length < 10) {
@@ -27,7 +27,7 @@ function UpdateComment ({ comment_id, setIsNewComment, comment }) {
                comment: newComment
             }
 
-            dispatch(updateCommentThunk(commentData, comment_id)).then(() => setIsNewComment(true)).then(() => closeModal())
+            dispatch(updateCommentThunk(commentData, Number(comment_id))).then(() => setIsNewComment(true)).then(() => closeModal())
         }
     }
 

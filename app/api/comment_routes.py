@@ -5,25 +5,31 @@ from ..forms import CommentForm
 
 comment_routes = Blueprint('comments', __name__)
 
-@comment_routes.route('/<int:comment_id>', methods=['PUT'])
+@comment_routes.route('/<int:comment_id>/update', methods=['PUT'])
 @login_required
 def update_a_comment(comment_id):
 
     comment_to_edit = Comment.query.get(comment_id)
-    
+
+    if not comment_to_edit:
+        abort(404, description='Comment not found')
+        
     if comment_to_edit.user_id == current_user.id:
-       
+    
         comment_form = CommentForm()
         comment_form['csrf_token'].data = request.cookies['csrf_token']
+       
         if comment_form.validate_on_submit():
+            
             comment_to_edit.comment = comment_form.comment.data
 
             db.session.commit()
 
             return jsonify(comment_to_edit.to_dict())
-        
+        else: abort(403, description='Comment data failed to validate.')
 
     abort(401, description='Unauthorized')
+
 
     
 @comment_routes.route('/<int:comment_id>', methods=['DELETE'])
@@ -37,5 +43,5 @@ def delete_a_comment(comment_id):
     if comment_to_delete.user_id == current_user.id:
         db.session.delete(comment_to_delete)
         db.session.commit()
-        return jsonify({'message': 'Review successfully deleted'})
+        return jsonify({'message': 'Comment successfully deleted'})
     abort(401, description='Unauthorized')

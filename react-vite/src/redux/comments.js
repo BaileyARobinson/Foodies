@@ -35,17 +35,19 @@ export const createCommentThunk = (newCommentData, dishId) => async(dispatch) =>
 }
 
 export const updateCommentThunk = (comment, comment_id) => async (dispatch) => {
-    const res = await fetch(`/api/comments/${comment_id}`, {
+    const res = await fetch(`/api/comments/${comment_id}/update`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify(comment)
     })
+    console.log(res)
     if (res.ok) {
-        const comment = await res.json()
-        dispatch(updateComment(comment))
-        return comment
+        const updatedComment = await res.json()
+        console.log(updatedComment)
+        dispatch(updateComment(updatedComment))
+        return updatedComment
     } else {
         const errors = await res.json()
         return errors
@@ -56,9 +58,9 @@ export const updateCommentThunk = (comment, comment_id) => async (dispatch) => {
 // reducer 
 
 const commentReducer = (state = {}, action) => {
+    let newState= {}
     switch (action.type) {
         case CREATE_COMMENT: {
-            const newState = {}
             newState[action.payload.id] = action.payload
             return {...state, ...newState}
         } case UPDATE_COMMENT: {

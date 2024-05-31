@@ -14,7 +14,7 @@ function CreateComment ({dish_id, dish_name, setIsNewComment}) {
     const dispatch = useDispatch()
   
     const err = {}
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault()
 
         if (comment.length < 10) {
