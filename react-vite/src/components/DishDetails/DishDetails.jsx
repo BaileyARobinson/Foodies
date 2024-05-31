@@ -51,7 +51,7 @@ function DishDetails () {
                                     <OpenModalButton
                                     buttonText='Update'
                                     className='update-comment-button'
-                                    modalComponent={<UpdateComment comment_id={comment.id} setIsNewComment={setIsNewComment}/>}
+                                    modalComponent={<UpdateComment comment_id={comment.id} comment={comment.comment} setIsNewComment={setIsNewComment}/>}
                                     />}
                                     {user.id == comment.user.user_id && 
                                     <OpenModalButton
