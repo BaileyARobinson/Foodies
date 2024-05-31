@@ -17,8 +17,8 @@ function CreateComment ({dish_id, dish_name, setIsNewComment}) {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (comment.length < 25) {
-            err.comment = 'Comments must be at least 25 characters'
+        if (comment.length < 10) {
+            err.comment = 'Comments must be at least 10 characters'
             setErrors(err)
         } if (comment.length > 400) {
             err.comment = 'Comments must be less than 400 characters'

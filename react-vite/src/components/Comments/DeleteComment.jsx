@@ -1,9 +1,13 @@
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
-import { createCommentThunk } from "../../redux/comments";
+//import { deleteCommentThunk } from "../../redux/comments";
 import { useState } from 'react'
 
 function DeleteComment () {
+
+    const dispatch = useDispatch()
+    const { closeModal } = useModal()
+
 
     return (
         <h1>hello</h1>

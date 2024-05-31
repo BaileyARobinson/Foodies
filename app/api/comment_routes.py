@@ -26,3 +26,16 @@ def update_a_comment(comment_id):
     abort(401, description='Unauthorized')
 
     
+@comment_routes.route('/<int:comment_id>', methods=['DELETE'])
+@login_required
+def delete_a_comment(comment_id):
+
+    comment_to_delete = Comment.query.get(comment_id)
+    if not comment_to_delete:
+        return jsonify({'message': "Comment couldn't be found."}), 404
+    
+    if comment_to_delete.user_id == current_user.id:
+        db.session.delete(comment_to_delete)
+        db.session.commit()
+        return jsonify({'message': 'Review successfully deleted'})
+    abort(401, description='Unauthorized')

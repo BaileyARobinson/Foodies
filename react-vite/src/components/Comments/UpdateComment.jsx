@@ -15,10 +15,10 @@ function UpdateComment ({ comment_id, setIsNewComment, comment }) {
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        if (comment.length < 25) {
-            err.comment = 'Comments must be at least 25 characters'
+        if (newComment.length < 10) {
+            err.comment = 'Comments must be at least 10 characters'
             setErrors(err)
-        } if (comment.length > 400) {
+        } if (newComment.length > 400) {
             err.comment = 'Comments must be less than 400 characters'
             setErrors(err)
         } else {
