@@ -23,7 +23,7 @@ function LandingPage() {
             <div className='all-dishes'>
                 {dishes && 
                     Object.values(dishes).map((dish) => {
-                        return <div className='dish-card' key={dish.id}    title={dish.name} onClick={(()=> {
+                        return <div className='dish-card' key={dish.id} title={dish.name} onClick={(()=> {
                             navigate(`/dishes/${dish.id}`)
                             })}> 
                             <img className='thumbnail' src={dish.img} alt={dish.description}/>

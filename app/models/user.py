@@ -2,6 +2,7 @@ from .db import db, environment, SCHEMA, add_prefix_for_prod
 #from ..models import Follower
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from sqlalchemy.orm.attributes import instance_state
 from datetime import datetime
 
 
@@ -32,12 +33,17 @@ class User(db.Model, UserMixin):
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
     
-    dish = db.relationship('Dish', back_populates='creator', cascade='all, delete-orphan')
+    dishes = db.relationship('Dish', back_populates='creator', cascade='all, delete-orphan')
     comments = db.relationship('Comment', back_populates='commenter')
     followee = db.relationship('Follower', foreign_keys=[Follower.user_id],back_populates='followed', cascade='all, delete-orphan')
     follower = db.relationship ('Follower', foreign_keys=[Follower.follower_id], back_populates='following', cascade='all, delete-orphan')
 
-  
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'email': self.email
+        }
 
 
     @property
@@ -51,11 +57,4 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
-    def to_dict(self):
-        return {
-            'id': self.id,
-            'username': self.username,
-            'email': self.email
-        }
-
-    
+  

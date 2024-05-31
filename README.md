@@ -439,3 +439,55 @@ Creates and returns a new spot.
       }
     }
     ```
+
+
+### Create a Comment
+
+Creates and returns a new comment associated to a dish.
+
+* Require Authentication: true
+* Request
+  * Method: POST
+  * URL: /api/dishes/<dishId>/comments/new
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+        {
+          "comment": "This dish looks amazing. Did you make your own  sauce? What spices did you use in the sauce? I'm always curious what combinations others are trying."
+        }
+    ```
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "comment": "This dish looks amazing. Did you make your own  sauce? What spices did you use in the sauce? I'm always curious what combinations others are trying.",
+       "id": 14,
+      "updated_at": "Thu, 30 May 2024 19:51:47 GMT",
+      "user": {
+          "username": "Marnie"
+        }
+    }
+    ```
+
+* Error Response: Body validation errors
+  * Status Code: 400
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+      {
+        "errors": {
+          "comment": [
+            "Field must be between 25 and 400 characters long."
+          ]
+        }
+      }
+    ```

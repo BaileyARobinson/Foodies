@@ -45,3 +45,9 @@ img {
 .commenter {
     font-weight: bold;
 }
+
+.button-holder {
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+}

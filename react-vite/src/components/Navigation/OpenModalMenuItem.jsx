@@ -19,4 +19,4 @@ function OpenModalMenuItem({
   );
 }
 
-export default OpenModalMenuItem;
+export default OpenModalMenuItem
