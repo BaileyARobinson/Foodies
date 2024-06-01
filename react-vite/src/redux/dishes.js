@@ -2,6 +2,7 @@
 
 export const LOAD_DISHES = 'LOAD_DISHES'
 export const LOAD_DISH = 'LOAD_DISH'
+export const CREATE_DISH = 'CREATE_DISH'
 
 // action creators 
 
@@ -12,6 +13,11 @@ export const loadDishes = (dishes) => ({
 
 export const loadDish = (dish) => ({
     type: LOAD_DISH,
+    payload: dish,
+})
+
+export const createDish = (dish) => ({
+    type: CREATE_DISH,
     payload: dish,
 })
 
@@ -45,14 +51,34 @@ export const getDishThunk = (id) => async (dispatch) => {
     }
 }
 
+export const createDishThunk = (newDishData) => async (dispatch) => {
+    
+    const res = await fetch('/api/dishes/new', {
+        method: 'POST',
+        body: newDishData
+    })
+    if (res.ok) {
+        const { newDish } = await res.json()
+        dispatch(createDish(newDish))
+    } else {
+        const errors = await res.json()
+        return errors 
+    }
+
+}
+
 // reducer 
 
 const dishesReducer = (state = {}, action) => {
+    let newState={}
     switch(action.type) {
         case LOAD_DISHES: {
             return {...state,  ...action.payload}
         } case LOAD_DISH: {
             return {...state, ...action.payload}
+        } case CREATE_DISH: {
+            newState[action.payload.id] = action.payload
+            return {...state, ...newState}
         }
         default:
             return state;

@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, abort
 from flask_login import login_required, current_user
 from app.models import Dish, Comment, db
-from ..forms import CommentForm
+from ..forms import CommentForm, DishForm
+from .helper_functions import get_unique_filename, upload_file_to_s3
 
 dish_routes = Blueprint('dishes', __name__)
 
@@ -36,7 +37,39 @@ def get_dish_by_id(id):
     return dish.to_dict(include_comments=True)
 
 
+# Create dish 
 
+@dish_routes.route('/new', methods=['POST'])
+@login_required
+def create_dish():
+
+    dish_form = DishForm()
+    dish_form['csrf_token'].data = request.cookies['csrf_token']
+    
+    if dish_form.validate_on_submit():
+        image = dish_form.data['image']
+        image.filename = get_unique_filename(image.filename)
+        upload = upload_file_to_s3(image)
+        print(upload)
+
+        if "url" not in upload: 
+            return jsonify({"message": upload})
+        
+        url = upload['url']
+        
+        new_dish = Dish(
+            name = dish_form.name.data,
+            description = dish_form.description.data,
+            img = url,
+            user_id = current_user.id, 
+            home_cooked = dish_form.home_cooked.data
+        )
+        db.session.add(new_dish)
+        db.session.commit()
+
+        return jsonify(new_dish.to_dict())
+
+    abort(403, description="Form failed validation.")
 
 ################# COMMENT ROUTES #####################
 

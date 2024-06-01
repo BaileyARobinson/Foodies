@@ -1,3 +1,78 @@
+.nav-bar { 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100px;
+  background-color: black;
+  padding: 5px 20px;
+}
+
+.nav-logo {
+  width: 150px;
+  height: 100px;
+  padding-left: 20px;
+}
+
 .profile-dropdown {
   position: absolute;
+  right: 0;
+  margin-right: 18px;
+  margin-top:-2px;
+  padding-left: 0;
+  border-radius: 1em;
+  border-color: white;
+  width: 175px;
+  height: 125px;
+  background-color: lavender;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.profile-dropdown > p {
+  margin-top: 4px;
+}
+
+.logout-button {
+  width: 125px;
+}
+
+
+.right-side-nav {
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  align-items: center;
+  
+}
+
+.create-a-dish {
+  height: 60px;
+  width: 145px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #06c9cc;
+  border-radius: 1em;
+}
+
+.stand-in-button {
+  width: 145px;
+  height: 60px;
+}
+
+.profile-button {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.2em;
+  background: white;
+}
+
+.profile-dropdown > button {
+  width: 100px;
+  border-radius: 0 0 1em 1em; 
+  font-size: 12px;
 }
