@@ -52,7 +52,7 @@ export const getDishThunk = (id) => async (dispatch) => {
 }
 
 export const createDishThunk = (newDishData) => async (dispatch) => {
-    
+    console.log(newDishData)
     const res = await fetch('/api/dishes/new', {
         method: 'POST',
         body: newDishData

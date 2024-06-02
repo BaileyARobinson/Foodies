@@ -42,11 +42,12 @@ def get_dish_by_id(id):
 @dish_routes.route('/new', methods=['POST'])
 @login_required
 def create_dish():
-
+    print("GETTING TO THE ROUTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     dish_form = DishForm()
     dish_form['csrf_token'].data = request.cookies['csrf_token']
     
     if dish_form.validate_on_submit():
+        print("GETTING TO THE Validate on Submit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         image = dish_form.data['image']
         image.filename = get_unique_filename(image.filename)
         upload = upload_file_to_s3(image)

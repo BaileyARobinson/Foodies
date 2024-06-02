@@ -11,3 +11,4 @@ class DishForm(FlaskForm):
     home_cooked = BooleanField('Home-Cooked')
     image = FileField("Image File", validators=[FileRequired(), FileAllowed(list(ALLOWED_EXTENSIONS))])
     submit = SubmitField("Create Post")
+

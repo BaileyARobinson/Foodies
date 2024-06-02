@@ -17,14 +17,15 @@ function CreateDish () {
 
     const handleSubmit = async (e) => {
         e.preventDefault() 
-
+        
+        console.log("Name", name)
         const formData = new FormData()
         formData.append("name", name)
         formData.append("description", description)
         formData.append("img", image)
         formData.append("home_cooked", homeMade)
 
-        console.log(formData)
+        console.log("am i getting here?", formData)
 
         setImageLoading(true)
 
@@ -35,18 +36,19 @@ function CreateDish () {
 
     return (
         <form  onSubmit={handleSubmit} encType='multipart/form-data'>
-            <div><p>Name</p>
-            <input type='text' value={name} 
+            <div>
+                <p>Name</p>
+                <input type='text' value={name} 
                 onChange ={((e) => setName(e.target.value))}/>
             </div>
-            <div>
-            <p>Description</p>
-            <input type='text' value={description} 
+            <div className='description-input'>
+                <p>Description</p>
+                <textarea name='description-input' rows={6} cols={80} value={description} 
                 onChange ={((e) => setDescription(e.target.value))}/>
             </div>
             <div>
-            <p>Home Cooked</p>
-            <input type='checkbox' checked={homeMade === true} onChange={(e) => setHomeMade(true)} />
+                <p>Home Cooked</p>
+                <input type='checkbox' checked={homeMade === true} onChange={() => setHomeMade(true)} />
             </div>
             <div>
             <p>Image</p>
