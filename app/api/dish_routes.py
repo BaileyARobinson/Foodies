@@ -37,6 +37,17 @@ def get_dish_by_id(id):
     return dish.to_dict(include_comments=True)
 
 
+# Get dishes by current user
+
+@dish_routes.route('/current')
+@login_required
+def dishes_by_user():
+
+    dishes = Dish.query.filter_by(user_id=current_user.id)
+
+    return jsonify([dish.to_dict() for dish in dishes])
+
+
 # Create dish 
 
 @dish_routes.route('/new', methods=['POST'])

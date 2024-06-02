@@ -24,6 +24,10 @@ class Comment(db.Model):
 
         comment_dict = {
             'id': self.id,
+            'dish': {
+                'name': self.dish.name,
+                'dish_id': self.dish.id
+            },
             'user': {
                 'username': self.commenter.username,
                 'user_id': self.commenter.id

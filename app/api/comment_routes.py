@@ -5,6 +5,19 @@ from ..forms import CommentForm
 
 comment_routes = Blueprint('comments', __name__)
 
+## Get comments by current user
+
+@comment_routes.route('/current')
+@login_required
+def comments_by_user():
+
+    comments = Comment.query.filter_by(user_id = current_user.id)
+
+    return jsonify([comment.to_dict() for comment in comments])
+
+
+## edit comment 
+
 @comment_routes.route('/<int:comment_id>/update', methods=['PUT'])
 @login_required
 def update_a_comment(comment_id):
@@ -30,7 +43,7 @@ def update_a_comment(comment_id):
 
     abort(401, description='Unauthorized')
 
-
+## delete comment 
     
 @comment_routes.route('/<int:comment_id>', methods=['DELETE'])
 @login_required
