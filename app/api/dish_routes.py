@@ -48,7 +48,7 @@ def create_dish():
     
     if dish_form.validate_on_submit():
         print("GETTING TO THE Validate on Submit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        image = dish_form.data['image']
+        image = dish_form.data['img']
         image.filename = get_unique_filename(image.filename)
         upload = upload_file_to_s3(image)
         print(upload)
@@ -68,6 +68,7 @@ def create_dish():
         db.session.add(new_dish)
         db.session.commit()
 
+        print("What are we returning, sir, to dict!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", new_dish.to_dict())
         return jsonify(new_dish.to_dict())
 
     abort(403, description="Form failed validation.")

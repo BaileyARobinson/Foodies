@@ -17,20 +17,19 @@ function CreateDish () {
 
     const handleSubmit = async (e) => {
         e.preventDefault() 
-        
-        console.log("Name", name)
+
+    
         const formData = new FormData()
         formData.append("name", name)
         formData.append("description", description)
         formData.append("img", image)
         formData.append("home_cooked", homeMade)
 
-        console.log("am i getting here?", formData)
 
         setImageLoading(true)
 
-        await dispatch(createDishThunk(formData))
-        navigate('/')
+        const newDish = await dispatch(createDishThunk(formData))
+        navigate(`/dishes/${newDish.id}`)
 
     }
 

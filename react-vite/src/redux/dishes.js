@@ -58,8 +58,9 @@ export const createDishThunk = (newDishData) => async (dispatch) => {
         body: newDishData
     })
     if (res.ok) {
-        const { newDish } = await res.json()
+        const newDish = await res.json()
         dispatch(createDish(newDish))
+        return newDish
     } else {
         const errors = await res.json()
         return errors 
@@ -77,6 +78,7 @@ const dishesReducer = (state = {}, action) => {
         } case LOAD_DISH: {
             return {...state, ...action.payload}
         } case CREATE_DISH: {
+            console.log("label", action.payload)
             newState[action.payload.id] = action.payload
             return {...state, ...newState}
         }
