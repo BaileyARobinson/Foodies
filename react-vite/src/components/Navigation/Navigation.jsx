@@ -8,7 +8,7 @@ import "./Navigation.css";
 function Navigation() {
 
   const user = useSelector((state) => state.session)
-    console.log(user)
+ 
   const navigate = useNavigate()
 
   return (
