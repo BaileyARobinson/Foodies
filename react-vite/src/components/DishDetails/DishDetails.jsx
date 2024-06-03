@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getDishThunk } from "../../redux/dishes";
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import  OpenModalButton  from '../OpenModalButton'
 import { CreateComment, UpdateComment, DeleteComment } from "../Comments";
 import './DishDetails.css'
@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react'
 function DishDetails () {
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [isNewComment, setIsNewComment] = useState(false)
     const { id } = useParams()
@@ -18,26 +19,26 @@ function DishDetails () {
         setIsNewComment(false)
     }, [dispatch, id, isNewComment])
 
-    const dish = useSelector((state) => state.dishes)
+    const dish = useSelector((state) => state.dishes.dish)
     const user = useSelector((state) => state.session.user)
     console.log(dish)
     console.log(user)
 
     return ( 
         <div className='dish'>
-            <h1>{dish.name}</h1> 
+            <div className='header'><h1>{dish?.name}</h1> {user?.id === dish?.user_id?.id ? <div className='buttons'><button onClick={() => navigate(`/dishes/${dish.id}/update`)}>Update Dish</button> <button>Delete Dish</button></div> : <div></div> } </div>
             <div className='dish-container'>
-                <img className='image' src={dish.img}/>
+                <img className='image' src={dish?.img}/>
                 <div className='sidebar'>
                     <div className='top-of-sidebar'>
                     <div>{dish?.comments?.length === 1 ? 
                         `${dish?.comments?.length} comment`: 
                         `${dish?.comments?.length} comments`}</div>
                     
-                    <div>{dish.homeCooked === true ? `HomeCooked` : `Restaurant Dish`}</div>
+                    <div>{dish?.homeCooked === true ? `HomeCooked` : `Restaurant Dish`}</div>
                     </div>
                     <div className='dish-page-description'>
-                        {dish.description}
+                        {dish?.description}
                     </div>
     
                     <div className='sidebar-all-comments'>

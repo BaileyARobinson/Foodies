@@ -128,12 +128,12 @@ export const updateDishWOAWSThunk = (updateDishData, id) => async (dispatch) => 
 
 // reducer 
 
-const dishesReducer = (state = { allDishes: {}, dishesByUser: {}, dish: {}}, action) => {
+const dishesReducer = (state = { allDishes: {}, dishesByUser: {}, dish: {} }, action) => {
     switch(action.type) {
         case LOAD_DISHES: {
             return {...state,  allDishes: {...action.payload}}
         } case LOAD_DISH: {
-            return {...state, dish: {...action.payload}}
+            return {...state, dish:{...action.payload}}
         } case CREATE_DISH: {
             newState[action.payload.id] = action.payload
             return {...state, ...newState}

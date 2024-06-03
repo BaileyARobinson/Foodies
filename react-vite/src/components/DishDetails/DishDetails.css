@@ -22,6 +22,17 @@ img {
     
 
 }
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hearder > button {
+    margin: 10px 10px 10px 10px;
+    padding-right: 10px;
+}
 .dish-page-description {
     font-weight: bold;
     padding: 20px 20px 10px 10px;

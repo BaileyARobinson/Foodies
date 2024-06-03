@@ -16,13 +16,14 @@ function UpdateDish () {
     }, [dispatch, id])
 
     const dish = useSelector((state) => state.dishes.dish)
-
-    const [name, setName] = useState(dish.name)
-    const [description, setDescription] = useState(dish.description)
-    const [homeMade, setHomeMade] = useState(dish.home_cooked)
-    const [image, setImage] = useState(dish.image)
+    
+    const [name, setName] = useState(dish?.name)
+    const [description, setDescription] = useState(dish?.description)
+    const [homeMade, setHomeMade] = useState(dish?.home_cooked)
+    const [image, setImage] = useState(dish?.image)
     const [imageLoading, setImageLoading] = useState(false)
     const [hideImageUploader, setHideImageUpload] = useState(true)
+    
 
     const updateImage = (e) => {
         e.preventDefault()
@@ -31,23 +32,20 @@ function UpdateDish () {
 
     const handleSubmitWOAWS = async (e) => {
         e.preventDefault()
-
+        console.log ('hello from inside the submit button')
         const updatedDish = {
            name, 
-           img: image,
            description, 
            home_cooked: homeMade 
         }
         
        await dispatch(updateDishWOAWSThunk(updatedDish, id))
 
-        navigate(`/dishes/${dish.id}`)
-
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault() 
-    
+
         const formData = new FormData()
         formData.append("name", name)
         formData.append("description", description)
@@ -58,12 +56,12 @@ function UpdateDish () {
         setImageLoading(true)
 
         await dispatch(updateDishThunk(formData, id))
-        navigate(`/dishes/${dish.id}`)
 
     }
 
     return (
-        <form  onSubmit={hideImageUploader ? () => handleSubmitWOAWS() : () => handleSubmit() } encType='multipart/form-data'>
+        <>
+        <form onSubmit={hideImageUploader ? () => handleSubmitWOAWS() : () => handleSubmit() }encType='multipart/form-data'>
             <div>
                 <p>Name</p>
                 <input type='text' value={name} 
@@ -94,6 +92,7 @@ function UpdateDish () {
             {(imageLoading) && <p>Loading...</p>}
             
         </form>
+    </>
     )
 }
 

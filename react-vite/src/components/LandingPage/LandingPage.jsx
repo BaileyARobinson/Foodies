@@ -15,7 +15,7 @@ function LandingPage() {
         dispatch(getAllDishesThunk())
     }, [dispatch])
     
-    const dishes = useSelector((state) => state.dishes.allShops)
+    const dishes = useSelector((state) => state.dishes.allDishes)
     
     console.log(dishes)
     
