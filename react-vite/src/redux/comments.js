@@ -2,6 +2,7 @@
 
 export const CREATE_COMMENT ='CREATE REVIEW'
 export const UPDATE_COMMENT = 'UPDATE COMMENT'
+export const USER_COMMENTS = 'USER_COMMENTS'
 
 //action creators
 
@@ -13,6 +14,11 @@ export const createComment = (newComment) => ({
 export const updateComment = (comment) => ({
     type: UPDATE_COMMENT,
     payload: comment
+})
+
+export const userComments = (comments) => ({
+    type: USER_COMMENTS,
+    payload: comments
 })
 
 export const createCommentThunk = (newCommentData, dishId) => async(dispatch) => {
@@ -55,6 +61,20 @@ export const updateCommentThunk = (comment, comment_id) => async (dispatch) => {
 
 }
 
+export const usersCommentsThunk = () => async (dispatch) => {
+    const res = await fetch(`/api/comments/current`)
+    if (res.ok) {
+        const comments = await res.json();
+        const normalizedComments = {}
+        comments.forEach((comment) => normalizedComments[comment.id] = comment)
+        dispatch(userComments(normalizedComments))
+        return comments
+    } else {
+        const errors = await res.json()
+        return errors 
+    }
+}
+
 // reducer 
 
 const commentReducer = (state = {}, action) => {
@@ -65,6 +85,8 @@ const commentReducer = (state = {}, action) => {
             return {...state, ...newState}
         } case UPDATE_COMMENT: {
             return {...state, [action.payload.id]: action.payload}
+        } case USER_COMMENTS: {
+            return {...state, ...action.payload}
         }
         default: 
             return state

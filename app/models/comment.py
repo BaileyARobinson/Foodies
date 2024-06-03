@@ -26,7 +26,8 @@ class Comment(db.Model):
             'id': self.id,
             'dish': {
                 'name': self.dish.name,
-                'dish_id': self.dish.id
+                'dish_id': self.dish.id,
+                'image': self.dish.img
             },
             'user': {
                 'username': self.commenter.username,

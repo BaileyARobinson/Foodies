@@ -3,6 +3,8 @@
 export const LOAD_DISHES = 'LOAD_DISHES'
 export const LOAD_DISH = 'LOAD_DISH'
 export const CREATE_DISH = 'CREATE_DISH'
+export const USER_DISHES = 'USER_DISHES'
+export const UPDATE_DISH = 'UPDATE_DISH'
 
 // action creators 
 
@@ -19,6 +21,16 @@ export const loadDish = (dish) => ({
 export const createDish = (dish) => ({
     type: CREATE_DISH,
     payload: dish,
+})
+
+export const usersDishes = (dishes) => ({
+    type: USER_DISHES,
+    payload: dishes
+})
+
+export const updateDish = (dish) => ({
+    type: UPDATE_DISH,
+    payload: dish
 })
 
 // thunk action creators 
@@ -52,7 +64,6 @@ export const getDishThunk = (id) => async (dispatch) => {
 }
 
 export const createDishThunk = (newDishData) => async (dispatch) => {
-    console.log(newDishData)
     const res = await fetch('/api/dishes/new', {
         method: 'POST',
         body: newDishData
@@ -68,17 +79,67 @@ export const createDishThunk = (newDishData) => async (dispatch) => {
 
 }
 
+export const usersDishesThunk = () => async (dispatch) => {
+    const res = await fetch('/api/dishes/current')
+    if (res.ok) {
+        const dishes = await res.json() 
+        console.log(dishes)
+        const normalizedDishes = {}
+        dishes.forEach((dish) => normalizedDishes[dish.id] = dish)
+        dispatch(usersDishes(normalizedDishes))
+        return dishes 
+    } else {
+        const errors = await res.json()
+        return errors
+    }
+}
+
+export const updateDishThunk = (updatedDishData, id) => async (dispatch) => {
+    const res = await fetch(`/api/dishes/${id}/update`, {
+        method: 'PUT',
+        body: updatedDishData
+    }) 
+    if (res.ok) {
+        const updatedDish = res.json()
+        dispatch(updateDish(updatedDish))
+        return updatedDish
+    } else {
+        const errors = await res.json()
+        return errors
+    }
+}
+export const updateDishWOAWSThunk = (updateDishData, id) => async (dispatch) => {
+    const res = await fetch(`/api/dishes/${id}/noaws/update`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateDishData)
+    })
+    if (res.ok) {
+        const updateDish = res.json()
+        dispatch(updateDish(updateDish))
+        return updateDish
+    } else {
+        const errors = await res.json()
+        return errors
+    }
+}
+
 // reducer 
 
-const dishesReducer = (state = {}, action) => {
-    let newState={}
+const dishesReducer = (state = { allDishes: {}, dishesByUser: {}, dish: {}}, action) => {
     switch(action.type) {
         case LOAD_DISHES: {
-            return {...state,  ...action.payload}
+            return {...state,  allDishes: {...action.payload}}
         } case LOAD_DISH: {
-            return {...state, ...action.payload}
+            return {...state, dish: {...action.payload}}
         } case CREATE_DISH: {
-            console.log("label", action.payload)
+            newState[action.payload.id] = action.payload
+            return {...state, ...newState}
+        } case USER_DISHES: {
+            return {...state, dishesByUser: {...action.payload}}
+        } case UPDATE_DISH: {
             newState[action.payload.id] = action.payload
             return {...state, ...newState}
         }

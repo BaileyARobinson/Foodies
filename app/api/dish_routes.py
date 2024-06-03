@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request, abort
 from flask_login import login_required, current_user
+from sqlalchemy.orm import joinedload
 from app.models import Dish, Comment, db
-from ..forms import CommentForm, DishForm
+from ..forms import CommentForm, DishForm, DishNoAWSForm
 from .helper_functions import get_unique_filename, upload_file_to_s3
 
 dish_routes = Blueprint('dishes', __name__)
@@ -22,7 +23,7 @@ def get_all_dishes():
         dish_dict['num_of_comments'] = len(dish.comments)
         dishes_to_dict.append(dish_dict)
 
-    return dishes_to_dict
+    return jsonify(dishes_to_dict)
 
 # Get dish by Dish Id 
 
@@ -43,9 +44,14 @@ def get_dish_by_id(id):
 @login_required
 def dishes_by_user():
 
-    dishes = Dish.query.filter_by(user_id=current_user.id)
-
-    return jsonify([dish.to_dict() for dish in dishes])
+    dishes = Dish.query.filter_by(user_id=current_user.id).all()
+    dishes_by_user = []
+    for dish in dishes:
+        dish_by_user = dish.to_dict()
+        dish_by_user['num_of_comments'] = len(dish.comments)
+        dishes_by_user.append(dish_by_user)
+        
+    return jsonify(dishes_by_user)
 
 
 # Create dish 
@@ -53,12 +59,11 @@ def dishes_by_user():
 @dish_routes.route('/new', methods=['POST'])
 @login_required
 def create_dish():
-    print("GETTING TO THE ROUTE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     dish_form = DishForm()
     dish_form['csrf_token'].data = request.cookies['csrf_token']
     
     if dish_form.validate_on_submit():
-        print("GETTING TO THE Validate on Submit!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    
         image = dish_form.data['img']
         image.filename = get_unique_filename(image.filename)
         upload = upload_file_to_s3(image)
@@ -74,15 +79,71 @@ def create_dish():
             description = dish_form.description.data,
             img = url,
             user_id = current_user.id, 
-            home_cooked = dish_form.home_cooked.data
+            home_cooked = dish_form.home_cooked.data,
         )
         db.session.add(new_dish)
         db.session.commit()
 
-        print("What are we returning, sir, to dict!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", new_dish.to_dict())
         return jsonify(new_dish.to_dict())
 
     abort(403, description="Form failed validation.")
+
+# Update Dish with AWS 
+    
+@dish_routes.route('/<int:id>/update', methods=['PUT'])
+@login_required
+def update_dish(id):
+    dish_form = DishForm()
+    dish_form['csrf_token'].data = request.cookies['csrf_token']
+    
+    dish_to_edit = Dish.query.get(id)
+
+    if dish_form.validate_on_submit():
+    
+        image = dish_form.data['img']
+        image.filename = get_unique_filename(image.filename)
+        upload = upload_file_to_s3(image)
+
+        if "url" not in upload: 
+            return jsonify({"message": upload})
+        
+        url = upload['url']
+        
+        
+        dish_to_edit.name = dish_form.name.data
+        dish_to_edit.description = dish_form.description.data
+        dish_to_edit.img = url
+        dish_to_edit.home_cooked = dish_form.home_cooked.data
+    
+        db.session.commit()
+
+        return jsonify(dish_to_edit.to_dict())
+
+    abort(403, description="Form failed validation.")
+
+
+#Update dish no AWS 
+    
+@dish_routes.route('/<int:id>/noaws/update', methods=['PUT'])
+@login_required
+def update_dish_noaws(id):
+    dish_form = DishNoAWSForm()
+    dish_form['csrf_token'].data = request.cookies['csrf_token']
+    
+    dish_to_be_edited = Dish.query.get(id)
+
+    if dish_form.validate_on_submit():
+        
+        dish_to_be_edited.name = dish_form.name.data
+        dish_to_be_edited.description = dish_form.description.data 
+        dish_to_be_edited.home_cooked = dish_form.home_cooked.data
+    
+        db.session.commit()
+
+        return jsonify(dish_to_edit.to_dict())
+
+    abort(403, description="Form failed validation.")
+
 
 ################# COMMENT ROUTES #####################
 

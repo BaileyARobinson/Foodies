@@ -5,6 +5,7 @@ import { thunkLogout } from "../../redux/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import { Link, useNavigate } from 'react-router-dom'
 
 function ProfileButton() {
   const dispatch = useDispatch();
@@ -16,6 +17,8 @@ function ProfileButton() {
     e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
     setShowMenu(!showMenu);
   };
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!showMenu) return;
@@ -37,6 +40,7 @@ function ProfileButton() {
     e.preventDefault();
     dispatch(thunkLogout());
     closeMenu();
+    navigate('/')
   };
 
   return (
@@ -45,30 +49,33 @@ function ProfileButton() {
         <FaUserCircle />
       </button>
       {showMenu && (
-        <p className={"profile-dropdown"} ref={ulRef}>
+        <div className={"profile-dropdown"} ref={ulRef}>
           {user ? (
             <>
               <p>{user.username}</p>
-              <p>{user.email}</p>
-              <p>
-                <button className='logout-button' onClick={logout}>Log Out</button>
-              </p>
+              <Link className='profile-link'to={`/users/${user.id}`}onClick={() => closeMenu()}>Profile Page</Link>
+              <Link className='logout-link' onClick={logout}>Log Out</Link>
+
             </>
           ) : (
             <>
+            <p className='link'>
               <OpenModalMenuItem
                 itemText="Log In"
                 onItemClick={closeMenu}
                 modalComponent={<LoginFormModal />}
               />
+              </p>
+              <p className='link'>
               <OpenModalMenuItem
                 itemText="Sign Up"
                 onItemClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
+              </p>
             </>
           )}
-        </p>
+        </div>
       )}
     </div>
   );

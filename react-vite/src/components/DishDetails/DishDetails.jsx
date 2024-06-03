@@ -47,7 +47,7 @@ function DishDetails () {
                                     <div className='comment'>{comment.comment} <p className='commenter'>{`--${comment.user.username}`}</p>
                                     </div>
                                     <div className='update-delete-buttons'> 
-                                    {user.id == comment.user.user_id && 
+                                    {user?.id == comment?.user?.user_id && 
                                     <OpenModalButton
                                     buttonText='Update'
                                     className='update-comment-button'

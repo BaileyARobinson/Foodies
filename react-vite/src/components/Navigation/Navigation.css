@@ -28,10 +28,13 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  z-index: 1;
 }
 
 .profile-dropdown > p {
-  margin-top: 4px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+
 }
 
 .logout-button {
@@ -71,8 +74,20 @@
   background: white;
 }
 
-.profile-dropdown > button {
-  width: 100px;
-  border-radius: 0 0 1em 1em; 
-  font-size: 12px;
+
+.profile-dropdown > a {
+  font-weight: bolder;
+  color: indigo;
+  text-decoration: none;
+
 }
+
+.link{
+  color: indigo;
+  font-weight: bold;
+}
+
+.link:hover {
+  cursor: pointer;
+}
+
