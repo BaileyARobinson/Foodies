@@ -21,7 +21,11 @@ function DishDetails () {
         setIsNewComment(false)
     }, [dispatch, id, isNewComment])
 
-    
+    useEffect(() => {
+
+        if (!isDish) navigate('/')
+
+    }, [isDish])
 
     const dish = useSelector((state) => state.dishes.dish)
     const user = useSelector((state) => state.session.user)
@@ -35,7 +39,7 @@ function DishDetails () {
                                     buttonText='Delete'
                                     className='delete-dish-button'
                                     modalComponent={<DeleteDishModal dishId={dish.id} setIsDish={setIsDish}/>}
-                                    onModalClose={() => !isDish ? navigate('/'): navigate(`/dishes/${dish.id}`)}
+                                    // onModalClose={() => !isDish ? navigate('/'): navigate(`/dishes/${dish.id}`)}
                                     />
                 </div> : <div></div> } </div>
             <div className='dish-container'>
@@ -46,7 +50,7 @@ function DishDetails () {
                         `${dish?.comments?.length} comment`: 
                         `${dish?.comments?.length} comments`}</div>
                     
-                    <div>{dish?.homeCooked === true ? `HomeCooked` : `Restaurant Dish`}</div>
+                    <div>{dish?.homeCooked === true ? `Home Cooked` : `Restaurant Dish`}</div>
                     </div>
                     <div className='dish-page-description'>
                         {dish?.description}
@@ -69,7 +73,7 @@ function DishDetails () {
                                     <OpenModalButton
                                     buttonText='Delete'
                                     className='delete-comment-button'
-                                    modalComponent={<DeleteComment setIsNewComment={setIsNewComment}/>}
+                                    modalComponent={<DeleteComment commentId={comment.id} setIsNewComment={setIsNewComment}/>}
                                     />}
                                     </div>
                                 </div>
