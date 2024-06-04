@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect, useState } from "react"
+import { useEffect} from "react"
 import { usersCommentsThunk } from "../../redux/comments"
 import { usersDishesThunk } from "../../redux/dishes"
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 import './UserProfile.css'
 
 
@@ -24,7 +24,7 @@ function UserProfile () {
 
     return (
         <div className='user-profile-page'>
-            {usersDishes && Object.values(usersDishes).length >= 1 ? <div className='users-dishes'> <h2>Dishes you've posted:</h2>
+            {usersDishes && Object.values(usersDishes).length >= 1 ? <div className='users-dishes'> <h2>Dishes you have posted:</h2>
             <div className='all-users-dishes'>
                  {Object.values(usersDishes).map((dish) => {
                     return <div className='dish-card' key={dish.id} title={dish.name} onClick={()=> navigate(`/dishes/${dish?.id}`)}> 
@@ -46,20 +46,20 @@ function UserProfile () {
                 </div>
             </div>
             : <div className='no-dishes-created'>
-                <h2>You haven't posted any dishes yet.</h2>
+                <h2>You have not posted any dishes yet.</h2>
                 <div><button className='create-a-dish' onClick={() => navigate('/dishes/new')}>Create a New Dish</button></div>
                 </div>}
 
-            { usersComments && Object.values(usersComments).length >= 1? <div className='all-users-comments'> <h2>Dishes you've commented on:</h2>
+            { usersComments && Object.values(usersComments).length >= 1? <div className='all-users-comments'> <h2>Dishes you have commented on:</h2>
             <div className='users-comments'>
                 {Object.values(usersComments).map((comment) => {
-                    return <p className='comment-block' onClick={() => navigate(`/dishes/${comment?.dish?.dish_id}`)}><img className='dish-commented-on'src={comment.dish.image}/><div>{comment.comment}</div></p>
+                    return <p className='comment-block' key={comment.id}onClick={() => navigate(`/dishes/${comment?.dish?.dish_id}`)}><img className='dish-commented-on'src={comment.dish.image}/><div>{comment.comment}</div></p>
                 })}
                 </div>
             </div> 
             : 
             <div className='no-users-comments'>
-                    <h2> You haven't commented on any dishes.</h2>
+                    <h2> You have not commented on any dishes.</h2>
                     <button className='create-a-dish' onClick={() => navigate('/')}>View Dishes</button>
             </div>}
 
