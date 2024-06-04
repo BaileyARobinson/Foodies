@@ -15,17 +15,18 @@ function LandingPage() {
         dispatch(getAllDishesThunk())
     }, [dispatch])
     
-    const dishes = useSelector((state) => state.dishes) 
+    const dishes = useSelector((state) => state.dishes.allDishes)
+    
+    
 
     return (
-        <div className='whole-page'>
-            <h1>Foodie</h1>
+        <div className='landing-page'>
             <div className='all-dishes'>
                 {dishes && 
                     Object.values(dishes).map((dish) => {
-                        return <div className='dish-card' key={dish.id}    title={dish.name} onClick={(()=> {
+                        return <div className='dish-card' key={dish.id} title={dish.name} onClick={()=> {
                             navigate(`/dishes/${dish.id}`)
-                            })}> 
+                            }}> 
                             <img className='thumbnail' src={dish.img} alt={dish.description}/>
                             <div className='middle-of-card'> 
                                 <div className='left-of-middle'>
@@ -35,10 +36,12 @@ function LandingPage() {
                                 </div>
                                 <div className='right-of-middle'></div>
                             </div>
-                            <div className='description'> 
-                            {dish?.description?.length > 170 ? 
-                            `${dish?.description?.slice(0,170)}...` : dish.description } 
+                            <div className='dish-text'>
+                            <span className='dish-name'>{dish.name}&nbsp;&nbsp;</span><span className='description'> 
+                            {dish?.description?.length > 90 ? 
+                            `${dish?.description?.slice(0,90)}...` : dish.description } 
                             
+                            </span>
                             </div>
             
                         </div>

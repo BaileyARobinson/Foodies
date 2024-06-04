@@ -24,8 +24,14 @@ class Comment(db.Model):
 
         comment_dict = {
             'id': self.id,
+            'dish': {
+                'name': self.dish.name,
+                'dish_id': self.dish.id,
+                'image': self.dish.img
+            },
             'user': {
-                'username': self.commenter.username
+                'username': self.commenter.username,
+                'user_id': self.commenter.id
             },
             'comment': self.comment,
             'updated_at': self.updated_at,

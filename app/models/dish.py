@@ -17,7 +17,7 @@ class Dish(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
-    creator = db.relationship('User', back_populates='dish')
+    creator = db.relationship('User', back_populates='dishes')
     comments = db.relationship('Comment', back_populates='dish', cascade='all, delete-orphan')
     tags = db.relationship('Tag', secondary='selected_tags', back_populates='dishes')
 
@@ -29,7 +29,8 @@ class Dish(db.Model):
             'id': self.id,
             'name': self.name,
             'user_id': {
-                'username': self.creator.username
+                'username': self.creator.username,
+                'id': self.creator.id
             },
             'img': self.img,
             'description': self.description,

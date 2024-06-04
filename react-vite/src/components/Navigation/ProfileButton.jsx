@@ -5,6 +5,7 @@ import { thunkLogout } from "../../redux/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import { Link, useNavigate } from 'react-router-dom'
 
 function ProfileButton() {
   const dispatch = useDispatch();
@@ -16,6 +17,8 @@ function ProfileButton() {
     e.stopPropagation(); // Keep from bubbling up to document and triggering closeMenu
     setShowMenu(!showMenu);
   };
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!showMenu) return;
@@ -37,40 +40,44 @@ function ProfileButton() {
     e.preventDefault();
     dispatch(thunkLogout());
     closeMenu();
+    navigate('/')
   };
 
   return (
-    <>
-      <button onClick={toggleMenu}>
+    <div>
+      <button onClick={toggleMenu} className='profile-button'>
         <FaUserCircle />
       </button>
       {showMenu && (
-        <ul className={"profile-dropdown"} ref={ulRef}>
+        <div className={"profile-dropdown"} ref={ulRef}>
           {user ? (
             <>
-              <li>{user.username}</li>
-              <li>{user.email}</li>
-              <li>
-                <button onClick={logout}>Log Out</button>
-              </li>
+              <p>{user.username}</p>
+              <Link className='profile-link'to={`/users/${user.id}`}onClick={() => closeMenu()}>Profile Page</Link>
+              <Link className='logout-link' onClick={logout}>Log Out</Link>
+
             </>
           ) : (
             <>
+            <p className='link'>
               <OpenModalMenuItem
                 itemText="Log In"
                 onItemClick={closeMenu}
                 modalComponent={<LoginFormModal />}
               />
+              </p>
+              <p className='link'>
               <OpenModalMenuItem
                 itemText="Sign Up"
                 onItemClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />
+              </p>
             </>
           )}
-        </ul>
+        </div>
       )}
-    </>
+    </div>
   );
 }
 

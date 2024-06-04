@@ -1,0 +1,65 @@
+.user-profile-page {
+    display: flex;
+    flex-direction: row;
+}
+
+.all-users-dishes {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-basis: 70%;
+    min-width: 900px;
+    max-width: 900px;
+    flex-grow: 1;
+    margin-left: 20px;
+    justify-content: center;
+    border-right: 1px lightgrey solid;
+
+}
+
+.all-users-comments {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    border-left: solid black 1px;
+    flex-basis: 30%;
+    padding-left: 20px;
+
+}
+.comment-block {
+    display: flex;
+    border-bottom: lightgrey 1px solid
+
+}
+.dish-commented-on {
+    width: 100px;
+    height: 100px;
+    padding-right: 20px;
+}
+.dish-commented-on:hover {
+    cursor: pointer;
+}
+
+.users-dishes {
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+}
+
+.no-dishes-created {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 70%;
+    min-width: 900px;
+    max-width: 900px;
+    align-items: center;
+}
+
+.no-users-comments {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-left: 1px lightgrey solid;
+    padding-left: 20px;
+}
+

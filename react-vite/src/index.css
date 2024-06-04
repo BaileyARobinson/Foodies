@@ -1,1 +1,25 @@
 /* TODO: Add sitewide styles */
+*{
+    font-family: Reddit Mono;
+}
+
+button:hover {
+    background-color: teal;
+    cursor: pointer;
+}
+body {
+    margin: 0px
+}
+
+button {
+    background-color: #06c9cc;
+    border: none;
+    border-radius: 1em;
+    padding: 10px;
+}
+
+input {
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid black;
+}

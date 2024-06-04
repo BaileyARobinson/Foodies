@@ -3,6 +3,9 @@ import LoginFormPage from '../components/LoginFormPage';
 import SignupFormPage from '../components/SignupFormPage';
 import LandingPage from '../components/LandingPage'
 import DishDetails from '../components/DishDetails/DishDetails';
+import CreateDish from '../components/CreateDish'
+import UserProfile from '../components/UserProfile/UserProfile'
+import UpdateDish from '../components/UpdateDish'
 import Layout from './Layout';
 
 export const router = createBrowserRouter([
@@ -25,6 +28,18 @@ export const router = createBrowserRouter([
         path: "/dishes/:id",
         element: <DishDetails/>
 
+      }, 
+      {
+        path: "/dishes/new",
+        element: <CreateDish/>
+      }, 
+      {
+        path: "dishes/:id/update",
+        element: <UpdateDish/>
+      },
+      {
+        path: "/users/:id",
+        element: <UserProfile/>
       }
     ],
   },

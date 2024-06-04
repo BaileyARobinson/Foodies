@@ -1,0 +1,32 @@
+.login-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 20px;
+}
+
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.login-errors {
+    height: 15px;
+}
+.login-errors-space-holder {
+    height: 15px;
+}
+
+.login-button {
+    width: 100px;
+    margin: 15px; 
+}
+
+.login-inputs {
+    margin-bottom: 25px;
+}
+.login-inputs > input {
+    width: 75px;
+}

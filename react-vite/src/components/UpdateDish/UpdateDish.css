@@ -1,0 +1,53 @@
+.update-dish-page {
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px lightgrey solid;
+    border-right: 1px lightgrey solid;
+    align-self: center;
+    margin: auto;
+
+}
+
+.image-edit-holder {
+    display: flex;
+    flex-direction: column;
+}
+
+.image-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.image-edit > img {
+    height: 200px;
+    width: 200px;
+    padding: 20px;
+}
+
+
+
+.name-input > input {
+    width: 618px;
+}
+
+.home-cooked {
+    display: flex;
+}
+
+.home-cooked > p {
+    margin-right: 5px;
+    margin-left: 25px;
+}
+
+.image-uploader-input > input {
+    width: 618px;
+}
+
+.submit-button {
+    width: 110px;
+}
+
+
