@@ -5,6 +5,7 @@ import  OpenModalButton  from '../OpenModalButton'
 import { CreateComment, UpdateComment, DeleteComment } from "../Comments";
 import './DishDetails.css'
 import { useState, useEffect } from 'react'
+import DeleteDishModal from "../DeleteDish";
 
 function DishDetails () {
 
@@ -12,6 +13,7 @@ function DishDetails () {
     const navigate = useNavigate()
 
     const [isNewComment, setIsNewComment] = useState(false)
+    const [isDish, setIsDish] = useState(true)
     const { id } = useParams()
 
     useEffect(() => {
@@ -19,14 +21,23 @@ function DishDetails () {
         setIsNewComment(false)
     }, [dispatch, id, isNewComment])
 
+    
+
     const dish = useSelector((state) => state.dishes.dish)
     const user = useSelector((state) => state.session.user)
-    console.log(dish)
-    console.log(user)
+
 
     return ( 
         <div className='dish'>
-            <div className='header'><h1>{dish?.name}</h1> {user?.id === dish?.user_id?.id ? <div className='buttons'><button onClick={() => navigate(`/dishes/${dish.id}/update`)}>Update Dish</button> <button>Delete Dish</button></div> : <div></div> } </div>
+            <div className='header'><h1>{dish?.name}</h1> {user?.id === dish?.user_id?.id ? <div className='buttons'>
+                <button onClick={() => navigate(`/dishes/${dish.id}/update`)}>Update Dish</button> 
+                <OpenModalButton
+                                    buttonText='Delete'
+                                    className='delete-dish-button'
+                                    modalComponent={<DeleteDishModal dishId={dish.id} setIsDish={setIsDish}/>}
+                                    onModalClose={() => !isDish ? navigate('/'): navigate(`/dishes/${dish.id}`)}
+                                    />
+                </div> : <div></div> } </div>
             <div className='dish-container'>
                 <img className='image' src={dish?.img}/>
                 <div className='sidebar'>
@@ -70,7 +81,7 @@ function DishDetails () {
                                 <OpenModalButton
                                     buttonText='Comment'
                                     className='add-comment-button'
-                                    modalComponent={<CreateComment dish_id={dish.id} dish_name={dish.name} setIsNewComment={setIsNewComment}/>}
+                                    modalComponent={<CreateComment dish_id={dish?.id} dish_name={dish?.name} setIsNewComment={setIsNewComment}/>}
                                 />}
                     </div>
                 </div>

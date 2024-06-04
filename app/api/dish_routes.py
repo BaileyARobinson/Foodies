@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from sqlalchemy.orm import joinedload
 from app.models import Dish, Comment, db
 from ..forms import CommentForm, DishForm, DishNoAWSForm
-from .helper_functions import get_unique_filename, upload_file_to_s3
+from .helper_functions import get_unique_filename, upload_file_to_s3, remove_file_from_s3
 
 dish_routes = Blueprint('dishes', __name__)
 
@@ -140,9 +140,32 @@ def update_dish_noaws(id):
     
         db.session.commit()
 
-        return jsonify(dish_to_edit.to_dict())
+        return jsonify(dish_to_be_edited.to_dict())
 
     abort(403, description="Form failed validation.")
+
+
+# Delete Dish 
+    
+@dish_routes.route('/<int:dishId>', methods=['DELETE'])
+@login_required
+def delete_dish(dishId):
+
+    dish = Dish.query.get(dishId)
+
+    if not dish:
+        return jsonify({'message': 'Dish could not be found'}), 404
+
+    if dish.user_id == current_user.id: 
+        
+        # Delete image from AWS
+        remove_file_from_s3(dish.img)
+
+        db.session.delete(dish)
+        db.session.commit()
+        return jsonify({'message': 'Dish successfully deleted'})
+    abort(401, description='Unauthorized')
+
 
 
 ################# COMMENT ROUTES #####################

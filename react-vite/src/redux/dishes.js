@@ -5,6 +5,7 @@ export const LOAD_DISH = 'LOAD_DISH'
 export const CREATE_DISH = 'CREATE_DISH'
 export const USER_DISHES = 'USER_DISHES'
 export const UPDATE_DISH = 'UPDATE_DISH'
+export const DELETE_DISH = 'DELETE_DISH'
 
 // action creators 
 
@@ -31,6 +32,11 @@ export const usersDishes = (dishes) => ({
 export const updateDish = (dish) => ({
     type: UPDATE_DISH,
     payload: dish
+})
+
+export const deleteDish = (dishId) => ({
+    type: DELETE_DISH,
+    payload: dishId
 })
 
 // thunk action creators 
@@ -126,6 +132,21 @@ export const updateDishWOAWSThunk = (updateDishData, id) => async (dispatch) => 
     }
 }
 
+export const deleteDishThunk = (id) => async (dispatch) => {
+    const res = await fetch(`/api/dishes/${id}`, {
+        method: 'DELETE',
+        headers: { "Content-Type": "application/json" },
+    });
+    if (res.ok) {
+        const message = await res.json();
+        dispatch(deleteDish(id))
+        return message
+    }   else {
+        const errors = await response.json()
+        return errors
+      }
+}
+
 // reducer 
 
 const dishesReducer = (state = { allDishes: {}, dishesByUser: {}, dish: {} }, action) => {
@@ -135,13 +156,41 @@ const dishesReducer = (state = { allDishes: {}, dishesByUser: {}, dish: {} }, ac
         } case LOAD_DISH: {
             return {...state, dish:{...action.payload}}
         } case CREATE_DISH: {
-            newState[action.payload.id] = action.payload
-            return {...state, ...newState}
+            const newAllDishes = {
+                ...state.allDishes,
+                [action.payload.id]: action.payload
+            }
+            const newDishesByUser = {
+                ...state.dishesByUser,
+                [action.payload.id]: action.payload
+            }
+            return {...state, allDishes: newAllDishes, dishesByUser: newDishesByUser}
         } case USER_DISHES: {
             return {...state, dishesByUser: {...action.payload}}
         } case UPDATE_DISH: {
-            newState[action.payload.id] = action.payload
-            return {...state, ...newState}
+            const newAllDishes = {
+                ...state.allDishes,
+                [action.payload.id]: action.payload
+            }
+            const newDishesByUser = {
+                ...state.dishesByUser,
+                [action.payload.id]: action.payload
+            }
+            return {...state, allDishes: newAllDishes, dishesByUser: newDishesByUser}
+        } case DELETE_DISH: {
+            const newAllDishes = {
+                ...state.allDishes,
+            }
+            const newDishesByUser = {
+                ...state.dishesByUser
+            }
+            delete newAllDishes[action.payload]
+            delete newDishesByUser[action.payload]
+            let newDish = state.dish
+            if (state.dish.id === action.payload) {
+                newDish = null
+            }
+            return {allDishes: newAllDishes, dishesByUser: newDishesByUser, dish: newDish}
         }
         default:
             return state;

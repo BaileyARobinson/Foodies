@@ -17,7 +17,6 @@ function LandingPage() {
     
     const dishes = useSelector((state) => state.dishes.allDishes)
     
-    console.log(dishes)
     
 
     return (

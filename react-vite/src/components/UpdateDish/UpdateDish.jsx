@@ -3,6 +3,7 @@ import { updateDishThunk, getDishThunk, updateDishWOAWSThunk
  } from "../../redux/dishes";
 import { useState, useEffect} from 'react'
 import { useNavigate, useParams } from "react-router-dom";
+import './UpdateDish.css'
 
 function UpdateDish () {
 
@@ -23,16 +24,25 @@ function UpdateDish () {
     const [image, setImage] = useState(dish?.image)
     const [imageLoading, setImageLoading] = useState(false)
     const [hideImageUploader, setHideImageUpload] = useState(true)
+    const [errors, setErrors] = useState({})
+
+
     
 
     const updateImage = (e) => {
         e.preventDefault()
         setHideImageUpload(false)
     }
-
+    const err = {}
     const handleSubmitWOAWS = async (e) => {
         e.preventDefault()
-        console.log ('hello from inside the submit button')
+        
+        if (name.length > 50)  err.name = "Names are less than 50 characters long"
+        if (description.length < 10) err.description = 'Descriptions must be longer than 10 characters'
+        if (description.length > 400) err.description = 'Descriptions must be fewer than 400 characters'
+        setErrors(err)
+
+
         const updatedDish = {
            name, 
            description, 
@@ -41,11 +51,13 @@ function UpdateDish () {
         
        await dispatch(updateDishWOAWSThunk(updatedDish, id))
 
+       navigate('/')
+
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault() 
-
+        console.log(image)
         const formData = new FormData()
         formData.append("name", name)
         formData.append("description", description)
@@ -60,39 +72,66 @@ function UpdateDish () {
     }
 
     return (
-        <>
-        <form onSubmit={hideImageUploader ? () => handleSubmitWOAWS() : () => handleSubmit() }encType='multipart/form-data'>
-            <div>
+        <div className='update-dish-page'> 
+             <div className='image-edit-holder'>{hideImageUploader ? 
+                 <div className='image-edit'> <img src={dish.img}/> 
+                <button onClick={updateImage}>Update Image</button>
+                </div> : 
+                <div className='image-place-holder'> </div>}
+            </div>
+
+            {hideImageUploader ? <form onSubmit={handleSubmitWOAWS}> 
+                <div className='name-input'>
+                    <p>Name</p>
+                    <input type='text' value={name} 
+                    onChange ={((e) => setName(e.target.value))}/>
+                </div>
+            <div className='description-input'>
+                <p>Description</p>
+                <textarea name='description-input' rows={6} cols={80} value={description} 
+                onChange ={((e) => setDescription(e.target.value))}/>
+            </div>
+            <div className='home-cooked'>
+                <p>Home Made</p>
+                <input type='checkbox' checked={homeMade === true} onChange={() => setHomeMade(true)} />
+                <p>Restaurant Dish</p>
+                <input type='checkbox' checked={homeMade === false} onChange={() => setHomeMade(false)} />
+            </div>
+
+                <button className='submit-button'type="submit">Submit</button>
+            </form> : 
+            <form onSubmit={handleSubmit} encType='multipart/form-data'>
+            
+            <div className='image-uploader'>
+            <p>Image</p> 
+            {!hideImageUploader && 
+                <div className='image-uploader-input'> 
+                    <p>Must be a .pdf, .png, .jpg, .jpeg, .gif file.</p>
+                    <input type='file' accept='image/*' 
+                    onChange={(e) => setImage(e.target.files[0])}/>
+                </div>}
+            <div className='name-input'>
                 <p>Name</p>
                 <input type='text' value={name} 
                 onChange ={((e) => setName(e.target.value))}/>
+            </div>
             </div>
             <div className='description-input'>
                 <p>Description</p>
                 <textarea name='description-input' rows={6} cols={80} value={description} 
                 onChange ={((e) => setDescription(e.target.value))}/>
             </div>
-            <div>
+            <div className='home-cooked'>
                 <p>Home Made</p>
                 <input type='checkbox' checked={homeMade === true} onChange={() => setHomeMade(true)} />
                 <p>Restaurant Dish</p>
                 <input type='checkbox' checked={homeMade === false} onChange={() => setHomeMade(false)} />
             </div>
-            <div>
-            <p>Image</p>
-            <div className='image-edit'> {hideImageUploader ? <img src={dish.img}/>: <div className='image-place-holder'> </div>}<button onClick={updateImage}>Update Image</button></div>
-            {!hideImageUploader && 
-                <div> 
-                    <p>Must be a .pdf, .png, .jpg, .jpeg, .gif file.</p>
-                    <input type='file' accept='image/*' 
-                    onChange={(e) => setImage(e.target.files[0])}/>
-                </div>}
-            </div>
-            <button type="submit">Submit</button>
-            {(imageLoading) && <p>Loading...</p>}
             
-        </form>
-    </>
+            <button className='submit-button'type="submit">Submit</button>
+            {(imageLoading) && <p>Loading...</p>}
+        </form>}
+    </div>
     )
 }
 
