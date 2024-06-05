@@ -51,7 +51,7 @@ function UpdateDish () {
         
        await dispatch(updateDishWOAWSThunk(updatedDish, id))
 
-       navigate('/')
+       navigate(`/dishes/${dish?.id}`)
 
     }
 
@@ -68,6 +68,8 @@ function UpdateDish () {
         setImageLoading(true)
 
         await dispatch(updateDishThunk(formData, id))
+
+        navigate(`/dishes/${dish?.id}`)
 
     }
 

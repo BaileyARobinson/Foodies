@@ -1,8 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { deleteDishThunk } from "../../redux/dishes";
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 function DeleteDish ({dishId, setIsDish}) {
 

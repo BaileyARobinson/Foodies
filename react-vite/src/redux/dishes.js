@@ -142,7 +142,7 @@ export const deleteDishThunk = (id) => async (dispatch) => {
         dispatch(deleteDish(id))
         return message
     }   else {
-        const errors = await response.json()
+        const errors = await res.json()
         return errors
       }
 }
