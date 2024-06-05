@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getDishThunk } from "../../redux/dishes";
+import { getDishThunk, deleteDishThunk } from "../../redux/dishes";
 import { useParams, useNavigate } from 'react-router-dom'
 import  OpenModalButton  from '../OpenModalButton'
 import { CreateComment, UpdateComment, DeleteComment } from "../Comments";
@@ -19,28 +19,22 @@ function DishDetails () {
     useEffect(() => {
         dispatch(getDishThunk(id))
         setIsNewComment(false)
-    }, [dispatch, id, isNewComment])
-
-    // useEffect(() => {
-
-    //     if (!isDish) navigate('/')
-
-    // }, [isDish, navigate])
+    }, [dispatch, id, isNewComment, ])
 
     const dish = useSelector((state) => state.dishes.dish)
     const user = useSelector((state) => state.session.user)
 
+    const handleDelete = (e) => {
+        e.preventDefault()
+
+        dispatch(deleteDishThunk(dish.id)).then(() => navigate('/'))
+    }
 
     return ( 
         <div className='dish'>
             <div className='header'><h1>{dish?.name}</h1> {user?.id === dish?.user_id?.id ? <div className='buttons'>
                 <button onClick={() => navigate(`/dishes/${dish.id}/update`)}>Update Dish</button> 
-                <OpenModalButton
-                                    buttonText='Delete'
-                                    className='delete-dish-button'
-                                    modalComponent={<DeleteDishModal dishId={dish.id} setIsDish={setIsDish}/>}
-                                    // onModalClose={() => !isDish ? navigate('/'): navigate(`/dishes/${dish.id}`)}
-                                    />
+                <button onClick={handleDelete}>Delete Dish</button>
                 </div> : <div></div> } </div>
             <div className='dish-container'>
                 <img className='image' src={dish?.img}/>

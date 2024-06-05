@@ -10,7 +10,7 @@ function DeleteDish ({dishId, setIsDish}) {
     const handleDelete = (e) => {
         e.preventDefault()
 
-        dispatch(deleteDishThunk(dishId)).then(() => setIsDish(false)).then(() => closeModal())
+        dispatch(deleteDishThunk(dishId)).then(() => closeModal())
     }
 
     return (

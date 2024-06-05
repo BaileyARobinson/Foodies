@@ -2,6 +2,7 @@ import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { updateCommentThunk } from "../../redux/comments";
 import { useState } from 'react'
+import './UpdateComment.css'
 
 function UpdateComment ({ comment_id, setIsNewComment, comment }) {
     
@@ -33,7 +34,7 @@ function UpdateComment ({ comment_id, setIsNewComment, comment }) {
 
 
     return (
-      <div>
+      <div className='update-comment-modal'>
         <h2>Update your Comment</h2>
         <form className='update-comment-form' onSubmit={handleSubmit}>
             <div className='errors'>{errors.comment}</div>

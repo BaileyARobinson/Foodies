@@ -1,0 +1,19 @@
+.error-text {
+    height: 12px;
+}
+
+.sign-up-modal {
+    height: 500px;
+    width: 700px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around
+}
+
+form {
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around
+}
+
