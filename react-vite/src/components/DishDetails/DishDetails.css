@@ -80,12 +80,12 @@ h2 {
     margin-left: 20px;
 }
 
-form {
+.update-comment-form {
     width: 400px;
     max-height: 200px;
 }
 
-input {
+.update-comment-form >  input {
     width: 350px;
 
 }
