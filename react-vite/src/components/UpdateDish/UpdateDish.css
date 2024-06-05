@@ -52,5 +52,6 @@
 
 
 .error-text {
-    height: 12px;
+    height: 10px;
+    color: teal;
 }

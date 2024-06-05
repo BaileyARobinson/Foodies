@@ -34,7 +34,7 @@ function UpdateComment ({ comment_id, setIsNewComment, comment }) {
 
 
     return (
-      <div className='update-comment-modal'>
+      <div className=''>
         <h2>Update your Comment</h2>
         <form className='update-comment-form' onSubmit={handleSubmit}>
             <div className='errors'>{errors.comment}</div>
