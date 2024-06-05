@@ -123,9 +123,9 @@ export const updateDishWOAWSThunk = (updateDishData, id) => async (dispatch) => 
         body: JSON.stringify(updateDishData)
     })
     if (res.ok) {
-        const updateDish = res.json()
-        dispatch(updateDish(updateDish))
-        return updateDish
+        const updatedDish = res.json()
+        dispatch(updateDish(updatedDish))
+        return updatedDish
     } else {
         const errors = await res.json()
         return errors
