@@ -21,11 +21,11 @@ function DishDetails () {
         setIsNewComment(false)
     }, [dispatch, id, isNewComment])
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        if (!isDish) navigate('/')
+    //     if (!isDish) navigate('/')
 
-    }, [isDish])
+    // }, [isDish, navigate])
 
     const dish = useSelector((state) => state.dishes.dish)
     const user = useSelector((state) => state.session.user)
