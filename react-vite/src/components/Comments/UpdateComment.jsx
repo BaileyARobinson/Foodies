@@ -12,10 +12,10 @@ function UpdateComment ({ comment_id, setIsNewComment, comment }) {
     const [errors, setErrors] = useState({})
     const [newComment, setNewComment] = useState(comment)
 
-    const err = {}
+    
     const handleSubmit = (e) => {
         e.preventDefault()
-
+        let err = {}
         if (newComment.length < 10) {
             err.comment = 'Comments must be at least 10 characters'
             setErrors(err)
@@ -38,7 +38,7 @@ function UpdateComment ({ comment_id, setIsNewComment, comment }) {
         <h2>Update your Comment</h2>
         <form className='update-comment-form' onSubmit={handleSubmit}>
             <div className='errors'>{errors.comment}</div>
-            <input className='comment'
+            <textarea className='comment'
             type='textfield'
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}

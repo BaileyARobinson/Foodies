@@ -22,4 +22,9 @@ input {
     border: none;
     background-color: transparent;
     border-bottom: 2px solid black;
+    outline: none;
+}
+
+textarea {
+    outline: none;
 }

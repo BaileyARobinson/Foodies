@@ -1,16 +1,19 @@
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { deleteDishThunk } from "../../redux/dishes";
+import { useNavigate } from 'react-router-dom'
 
-function DeleteDish ({dishId, setIsDish}) {
+function DeleteDish ({dishId}) {
 
     const dispatch = useDispatch()
     const { closeModal } = useModal()
+    const navigate = useNavigate()
 
     const handleDelete = (e) => {
         e.preventDefault()
 
         dispatch(deleteDishThunk(dishId)).then(() => closeModal())
+        navigate('/')
     }
 
     return (

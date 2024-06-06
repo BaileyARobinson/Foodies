@@ -13,16 +13,19 @@ function CreateComment ({dish_id, dish_name, setIsNewComment}) {
     const { closeModal } = useModal()
     const dispatch = useDispatch()
   
-    const err = {}
+    
     const handleSubmit = (e) => {
         e.preventDefault()
-
+        
+        let err = {}
         if (comment.length < 10) {
             err.comment = 'Comments must be at least 10 characters'
-            setErrors(err)
         } if (comment.length > 400) {
             err.comment = 'Comments must be less than 400 characters'
+        } 
+        if (Object.keys(err).length > 0) {
             setErrors(err)
+
         } else {
             
             const commentData = {
@@ -35,20 +38,20 @@ function CreateComment ({dish_id, dish_name, setIsNewComment}) {
 
 
     return (
-        <>
+        <div className='create-comment-modal'>
             <h2>Comment on {dish_name}</h2>
             <form className='form' onSubmit={handleSubmit}>
-                <div className='errors'>{errors.comment}</div>
-                <input className='comment'
-                        type='text'
+                <div className='error-text'>{errors.comment}</div>
+                <textarea className='comment'
+                        type='textarea'
                         placeholder='Comment on the dish here...'
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}
                         required
                 />
-                <button className='create-comment-button' onSubmit={handleSubmit}>Comment</button>
+                <button className='create-comment-button' type='submit'>Comment</button>
              </form>
-        </>
+        </div>
     )
 }
 

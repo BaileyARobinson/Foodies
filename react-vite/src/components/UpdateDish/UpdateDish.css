@@ -52,6 +52,21 @@
 
 
 .error-text {
-    height: 10px;
-    color: teal;
+    height: 12px;
+    font-size: 12px;
+    color: rgb(10, 197, 197);
+    margin: 0px;
+    padding: 0px;
+}
+
+.create-comment-modal {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    height: 400px;
+
+}
+
+.comment {
+    width: 350px;
 }

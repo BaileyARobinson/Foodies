@@ -16,25 +16,35 @@ function SignupFormModal() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let err = {}
+    if (email.length < 5 || !email.includes('@') || !email.includes('.')) err.email = 'Please enter a valid Email'
+    if (username.length < 8) err.username = 'Username must be at least 5 characters long'
+    if (username.length > 20) err.username = 'Username must be less than 21 characters long'
+    if (password.length < 8) err.password = 'Password must be 8 characters'
+    if (password.length > 20) err.password = 'Password must be less than 21 characters long'
     if (password !== confirmPassword) {
       return setErrors({
         confirmPassword:
           "Confirm Password field must be the same as the Password field",
       });
     }
+    setErrors(err)
 
-    const serverResponse = await dispatch(
-      thunkSignup({
-        email,
-        username,
-        password,
-      })
-    );
+    if (Object.values(err).length === 0) {
 
-    if (serverResponse) {
-      setErrors(serverResponse);
-    } else {
-      closeModal();
+        const serverResponse = await dispatch(
+          thunkSignup({
+            email,
+            username,
+            password,
+          })
+        );
+    
+      if (serverResponse) {
+        setErrors(serverResponse);
+      } else {
+        closeModal();
+      }
     }
   };
 

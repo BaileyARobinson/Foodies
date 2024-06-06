@@ -6,4 +6,8 @@ textarea {
     margin-top: 20px;
 }
 
+.styled-button {
+    z-index: 10;
+    width: 100px;
+}
 

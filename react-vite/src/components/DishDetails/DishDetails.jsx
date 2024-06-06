@@ -34,7 +34,11 @@ function DishDetails () {
         <div className='dish'>
             <div className='header'><h1>{dish?.name}</h1> {user?.id === dish?.user_id?.id ? <div className='buttons'>
                 <button onClick={() => navigate(`/dishes/${dish.id}/update`)}>Update Dish</button> 
-                <button onClick={handleDelete}>Delete Dish</button>
+                <OpenModalButton
+                                    buttonText='Delete Dish'
+                                    className='delete-comment-button'
+                                    modalComponent={<DeleteDishModal dishId={id}/>}
+                                    />
                 </div> : <div></div> } </div>
             <div className='dish-container'>
                 <img className='image' src={dish?.img}/>
