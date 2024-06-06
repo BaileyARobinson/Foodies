@@ -11,3 +11,17 @@ textarea {
     width: 100px;
 }
 
+input[type=file]::file-selector-button {
+    display: none;
+}
+
+input[type=file]::-webkit-file-upload-button {
+    display: block;
+    width: 0;
+    height: 0;
+    margin-left: -100%;
+}
+
+input[type=file]::-ms-browse {
+    display: none;
+}

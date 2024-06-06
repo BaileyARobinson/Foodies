@@ -72,8 +72,9 @@ function CreateDish () {
             <div className='image-uploader-input'>
             <p>Image</p> <p className='error-text'>{errors.image}</p>
             <p>Must be a .pdf, .png, .jpg, .jpeg, .gif file.</p>
-                <div className='file-inputs-container'>
-                <input type='file' accept='image/*' 
+                <div className='image-uploader-input'>
+                    <button onClick={() => document.getElementById('choose-file').click()}>Choose File</button>
+                <input id='choose-file' type='file' accept='image/*' 
                 onChange={(e) => setImage(e.target.files[0])} required/>
                 </div>
             </div>
