@@ -37,7 +37,7 @@ function UpdateComment ({ comment_id, setIsNewComment, comment }) {
       <div className=''>
         <h2>Update your Comment</h2>
         <form className='update-comment-form' onSubmit={handleSubmit}>
-            <div className='errors'>{errors.comment}</div>
+            <div className='error-text'>{errors.comment}</div>
             <textarea className='comment'
             type='textfield'
             value={newComment}

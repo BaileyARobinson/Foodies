@@ -61,19 +61,18 @@ function UpdateDish () {
 
     const handleSubmit = async (e) => {
         e.preventDefault() 
-
-        let err = {}
-        console.log(image.name)
-        if (name.length === 0) err.name = 'Name field is required'
-        if (name.length > 50) err.name = 'Name must be less than 50 characters.'
-        if (description.length < 10) err.description = 'Description must be more than 10 characters.'
-        if (description.length >400 ) err.description = 'Description must be less than 400 characters.'
-        if (!(image.name.endsWith('.jpeg') || image.name.endsWith('.jpg') || image.name.endsWith('.png') || image.name.endsWith('.gif') || image.name.endsWith('.pdf'))) err.image = 'File is not the right type.'
+        console.log(name, description, image.name)
+        let allErr = {}
+        if (name.length === 0) allErr.name = 'Name field is required'
+        if (name.length > 50) allErr.name = 'Name must be less than 50 characters.'
+        if (description.length < 10) allErr.description = 'Description must be more than 10 characters.'
+        if (description.length > 400 ) allErr.description = 'Description must be less than 400 characters.'
+        if (!(image.name.endsWith('.jpeg') || image.name.endsWith('.jpg') || image.name.endsWith('.png') || image.name.endsWith('.gif') || image.name.endsWith('.pdf'))) allErr.image = 'File is not the right type.'
         
-        setErrors(err)
-        
-         if (Object.values(err) === 0) {
-
+        setErrors(allErr)
+        console.log(allErr)
+        if (Object.values(allErr).length === 0) {
+            console.log("no errors")
             const formData = new FormData()
             formData.append("name", name)
             formData.append("description", description)
