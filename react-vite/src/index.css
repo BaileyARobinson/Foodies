@@ -23,6 +23,7 @@ input {
     background-color: transparent;
     border-bottom: 2px solid black;
     outline: none;
+    padding-right: 5px;
 }
 
 textarea {
