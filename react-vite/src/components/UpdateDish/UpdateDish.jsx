@@ -33,10 +33,10 @@ function UpdateDish () {
         e.preventDefault()
         setHideImageUpload(false)
     }
-    const err = {}
+    
     const handleSubmitWOAWS = async (e) => {
         e.preventDefault()
-        
+        let err = {}
         if (name.length > 50)  err.name = "Names are less than 50 characters long"
         if (description.length < 10) err.description = 'Descriptions must be longer than 10 characters'
         if (description.length > 400) err.description = 'Descriptions must be fewer than 400 characters'
